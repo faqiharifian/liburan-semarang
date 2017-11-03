@@ -1,6 +1,8 @@
 package com.arifian.training.liburansemarang
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.design.widget.Snackbar
@@ -121,14 +123,19 @@ class DetailWisataActivity : AppCompatActivity() {
         return true
     }
 
-
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId){
             R.id.action_favorite -> {
                 favoriteClicked()
             }
-            R.id.action_direction -> {}
+            R.id.action_direction -> {
+                val gmmIntentUri = Uri.parse("google.navigation:q="+wisata.latitudeWisata+","+wisata.longitudeWisata)
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.`package` = "com.google.android.apps.maps"
+                if (mapIntent.resolveActivity(packageManager) != null) {
+                    startActivity(mapIntent)
+                }
+            }
             else -> {
                 return super.onOptionsItemSelected(item)
             }
