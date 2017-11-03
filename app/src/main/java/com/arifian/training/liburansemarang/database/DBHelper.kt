@@ -20,7 +20,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         private val DESKRIPSI_WISATA = "deskripsi_wisata"
         private val LATITUDE_WISATA = "latitude_wisata"
         private val LONGITUDE_WISATA = "longitude_wisata"
-        private val DATABASE_VERSION = 2
+        private val DATABASE_VERSION = 3
 
         private val CREATE_TABLE = ("CREATE TABLE " + DATABASE_TABLE
                 + " (" + WISATA_ID + " INTEGER  PRIMARY KEY, "
@@ -38,7 +38,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db!!.execSQL("DROP TABLE IF EXISTS "+ DATABASE_NAME)
+        db!!.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TABLE)
         onCreate(db)
     }
 

@@ -16,6 +16,10 @@ interface WisataService {
     @GET("read_wisata.php")
     fun wisata(@Query("sort") sort: String): Call<WisataResponse>
 
+    @FormUrlEncoded
+    @POST("update_favorite.php")
+    fun updateFavorite(@Field("id") id: String, @Field("favorite") favorite: Int): Call<BaseResponse>
+
     @Multipart
     @POST("create_wisata.php")
     fun wisataPost(@Part file: MultipartBody.Part,

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
+import com.arifian.training.liburansemarang.Utils.Constants
 import com.arifian.training.liburansemarang.Utils.Constants.Companion.KEY_WISATA
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils
 import com.arifian.training.liburansemarang.adapters.WisataAdapter
@@ -22,6 +23,7 @@ import java.util.*
  * A simple [Fragment] subclass.
  */
 class HomeFragment : Fragment() {
+
     lateinit var pref: PreferenceUtils
 
     internal lateinit var mBinding: FragmentHomeBinding
@@ -37,7 +39,7 @@ class HomeFragment : Fragment() {
 
         pref = PreferenceUtils(activity)
 
-        adapter = WisataAdapter(wisataArrayList, object: WisataAdapter.OnWisataClickListener{
+        adapter = WisataAdapter(wisataArrayList, object : WisataAdapter.OnWisataClickListener {
             override fun onItemClick(wisata: Wisata) {
                 val intent = Intent(activity, DetailWisataActivity::class.java)
                 intent.putExtra(KEY_WISATA, Parcels.wrap(wisata))
@@ -47,7 +49,11 @@ class HomeFragment : Fragment() {
 
         mBinding.recyclerView.adapter = adapter
 
-        getWisata()
+        if(savedInstanceState != null){
+            wisataArrayList = Parcels.unwrap(savedInstanceState.getParcelable(Constants.KEY_WISATA))
+        }else {
+            getWisata()
+        }
 
         return mBinding.root
     }
@@ -62,19 +68,19 @@ class HomeFragment : Fragment() {
 
         Log.e("sort", pref.sort())
 
-        when(id){
+        when (id) {
             R.id.action_sort_favorite -> {
-                if(pref.sort() != PreferenceUtils.SORT_FAVORITE){
+                if (pref.sort() != PreferenceUtils.SORT_FAVORITE) {
                     getWisata()
                 }
             }
             R.id.action_sort_latest -> {
-                if(pref.sort() != PreferenceUtils.SORT_LATEST){
+                if (pref.sort() != PreferenceUtils.SORT_LATEST) {
                     getWisata()
                 }
             }
             R.id.action_sort_visited -> {
-                if(pref.sort() != PreferenceUtils.SORT_VISITED){
+                if (pref.sort() != PreferenceUtils.SORT_VISITED) {
                     getWisata()
                 }
             }
@@ -115,4 +121,9 @@ class HomeFragment : Fragment() {
             return fragment
         }
     }
-}// Required empty public constructor
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState!!.putParcelable(Constants.KEY_WISATA, Parcels.wrap(wisataArrayList))
+    }
+}

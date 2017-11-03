@@ -4,14 +4,19 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.design.widget.Snackbar
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import com.arifian.training.liburansemarang.Utils.Constants.Companion.KEY_WISATA
 import com.arifian.training.liburansemarang.Utils.GlideApp
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils
 import com.arifian.training.liburansemarang.database.DBHelper
 import com.arifian.training.liburansemarang.databinding.ActivityDetailWisataBinding
 import com.arifian.training.liburansemarang.models.Wisata
+import com.arifian.training.liburansemarang.models.remote.SimpleRetrofitCallback
 import com.arifian.training.liburansemarang.models.remote.WisataClient
+import com.arifian.training.liburansemarang.models.remote.responses.BaseResponse
 import org.parceler.Parcels
 
 class DetailWisataActivity : AppCompatActivity() {
@@ -23,6 +28,8 @@ class DetailWisataActivity : AppCompatActivity() {
     lateinit var pref: PreferenceUtils
 
     internal lateinit var db: DBHelper
+
+    lateinit var favoriteMenu: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,31 +51,33 @@ class DetailWisataActivity : AppCompatActivity() {
                 .centerCrop()
                 .into(mBinding.ivDetailGambar)
 
-        checkFavorite()
-
         mBinding.fab.setOnClickListener { view ->
-            val message: String
-            if(!favorite) {
-                var id = db.insert(wisata)
-                if (id <= 0) {
-                    message = "Favorite gagal ditambahkan ke database"
-                } else {
-                    message = "Favorite ditambahkan ke database"
-
-                    updateFavorite()
-                }
-            }else{
-                val count = db.delete(wisata)
-                if(count <= 0){
-                    message = "Favorite gagal dihapus dr database"
-                }else{
-                    message = "Favorite dihapus dr database"
-
-                    updateFavorite()
-                }
-            }
-            Snackbar.make(mBinding.fab, message, Snackbar.LENGTH_SHORT).show()
+            favoriteClicked()
         }
+    }
+
+    private fun favoriteClicked(){
+        val message: String
+        if(!favorite) {
+            var id = db.insert(wisata)
+            if (id <= 0) {
+                message = "Favorite gagal ditambahkan ke database"
+            } else {
+                message = "Favorite ditambahkan ke database"
+
+                updateFavorite()
+            }
+        }else{
+            val count = db.delete(wisata)
+            if(count <= 0){
+                message = "Favorite gagal dihapus dr database"
+            }else{
+                message = "Favorite dihapus dr database"
+
+                updateFavorite()
+            }
+        }
+        Snackbar.make(mBinding.fab, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun updateFavorite(){
@@ -81,12 +90,49 @@ class DetailWisataActivity : AppCompatActivity() {
         }
 
         checkFavorite()
+        updateFavoriteRemote()
+    }
+
+    private fun updateFavoriteRemote(){
+        WisataApplication.get(this)
+                .wisataService!!
+                .updateFavorite(wisata.idWisata.toString(), (if(favorite) 1 else 0))
+                .enqueue(object: SimpleRetrofitCallback<BaseResponse>(this){
+                    override fun onSuccess(response: BaseResponse) {
+
+                    }
+                })
     }
 
     private fun checkFavorite() {
-        if (favorite)
+        if (favorite) {
             mBinding.fab.setImageResource(R.drawable.ic_action_favorite_true)
-        else
+            favoriteMenu.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_action_favorite_true, theme)
+        }else {
             mBinding.fab.setImageResource(R.drawable.ic_action_favorite_false)
+            favoriteMenu.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_action_favorite_false, theme)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_detail, menu)
+        favoriteMenu = menu!!.findItem(R.id.action_favorite)
+        checkFavorite()
+        return true
+    }
+
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            R.id.action_favorite -> {
+                favoriteClicked()
+            }
+            R.id.action_direction -> {}
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+        return true
     }
 }
