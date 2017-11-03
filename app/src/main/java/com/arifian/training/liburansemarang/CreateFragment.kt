@@ -100,7 +100,6 @@ class CreateFragment : Fragment() {
         }else if(resultCode == RESULT_OK && data != null && requestCode == REQUEST_PLACE){
             place = PlacePicker.getPlace(activity, data)
             val alamat = place.address
-            mBinding.edtAlamat.setText(alamat!!)
             mBinding.statusMaps.text = alamat!!
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -145,7 +144,7 @@ class CreateFragment : Fragment() {
                 val file = File(FileUtils.getPath(activity, uri))
 
                 var namaGambar = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-                namaGambar += file.extension
+                namaGambar += "."+file.extension
                 val sFile = RequestBody.create(MediaType.parse("image/*"), file)
 
                 val fileToUpload = MultipartBody.Part.createFormData("file", namaGambar, sFile)

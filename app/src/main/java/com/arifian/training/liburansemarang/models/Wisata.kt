@@ -22,6 +22,8 @@ class Wisata {
         this.alamatWisata = alamatWisata
         this.latitudeWisata = latitudeWisata
         this.longitudeWisata = longitudeWisata
+        this.favorite = "-1"
+        this.pengunjung = "-1"
     }
 
     @SerializedName("id_wisata")
@@ -48,4 +50,10 @@ class Wisata {
     @SerializedName("longitude_wisata")
     @Expose
     var longitudeWisata: String? = null
+    @SerializedName("favorite")
+    @Expose
+    var favorite: String? = "-1"
+    @SerializedName("pengunjung")
+    @Expose
+    var pengunjung: String? = "-1"
 }

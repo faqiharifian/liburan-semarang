@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
+            supportActionBar!!.title = getString(R.string.app_name)
+            mBinding.navView.setCheckedItem(R.id.nav_home)
             super.onBackPressed()
         }
     }

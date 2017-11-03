@@ -1,8 +1,8 @@
-package com.arifian.training.liburansemarang.drawroutemap.models
+package com.arifian.training.liburansemarang.models.remote.responses.route
 
 import com.google.gson.annotations.SerializedName
 
-data class OverviewPolyline(
+data class Polyline(
 
 	@field:SerializedName("points")
 	val points: String? = null

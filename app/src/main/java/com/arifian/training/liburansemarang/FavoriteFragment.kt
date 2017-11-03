@@ -53,6 +53,12 @@ class FavoriteFragment : Fragment() {
 
         getWisata()
 
+        if(wisataArrayList.size <= 0){
+            mBinding.empty.visibility = View.VISIBLE
+        }else{
+            mBinding.empty.visibility = View.GONE
+        }
+
         return mBinding.root
     }
 

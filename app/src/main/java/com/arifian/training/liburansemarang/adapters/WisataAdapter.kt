@@ -53,6 +53,7 @@ class WisataAdapter(wisataArrayList: List<Wisata>, internal var listener: OnWisa
             GlideApp.with(binding.ivItemGambar)
                     .load(WisataClient.IMAGE_URL + wisata.gambarWisata!!)
                     .error(R.drawable.no_image_found)
+                    .centerCrop()
                     .into(binding.ivItemGambar)
 
             itemView.setOnClickListener { v -> listener.onItemClick(wisata) }

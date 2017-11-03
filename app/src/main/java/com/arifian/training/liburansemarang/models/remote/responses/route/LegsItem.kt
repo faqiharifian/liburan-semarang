@@ -1,4 +1,4 @@
-package com.arifian.training.liburansemarang.drawroutemap.models
+package com.arifian.training.liburansemarang.models.remote.responses.route
 
 import com.google.gson.annotations.SerializedName
 

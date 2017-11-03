@@ -1,5 +1,6 @@
 package com.arifian.training.liburansemarang.models.remote
 
+import com.arifian.training.liburansemarang.models.remote.responses.route.Response
 import com.arifian.training.liburansemarang.models.remote.responses.BaseResponse
 import com.arifian.training.liburansemarang.models.remote.responses.WisataResponse
 import okhttp3.MultipartBody
@@ -34,4 +35,7 @@ interface WisataService {
                    @Part("latitude_wisata") latitude_wisata: RequestBody,
                    @Part("longitude_wisata") longitude_wisata: RequestBody,
                    @Part("alamat_wisata") alamat_wisata: RequestBody): Call<BaseResponse>
+
+    @GET("https://maps.googleapis.com/maps/api/directions/json?sensor=false")
+    fun getRoute(@Query("origin") origin: String, @Query("destination") destination: String, @Query("key") key: String): Call<Response>
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="wisata"
             type="com.arifian.training.liburansemarang.models.Wisata"/>
@@ -11,6 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="4dp"
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
@@ -18,47 +20,117 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/iv_item_gambar"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="#999999"
-                    android:scaleType="centerCrop" />
-
-                <TextView
-                    android:id="@+id/tv_item_nama"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@{wisata.namaWisata}"
-                    android:textColor="@color/colorPrimary"
-                    android:textStyle="bold"
-                    tools:text="Lawang Sewu"/>
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_item_alamat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@{wisata.alamatWisata}"
-                    android:textSize="12sp"
-                    tools:text="Komplek Tugu Muda, Jl. Pemuda, Sekayu, Semarang Tengah, Sekayu, Semarang Tengah, Kota Semarang, Jawa Tengah 50132, Indonesia"/>
+                    <ImageView
+                        android:id="@+id/iv_item_gambar"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:background="#999999" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_item_nama"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@{wisata.namaWisata}"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        tools:text="Lawang Sewu"/>
+
+                    <TextView
+                        android:id="@+id/tv_item_alamat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@{wisata.alamatWisata}"
+                        android:textSize="12sp"
+                        android:lines="2"
+                        android:ellipsize="end"
+                        tools:text="Komplek Tugu Muda, Jl. Pemuda, Sekayu, Semarang Tengah, Sekayu, Semarang Tengah, Kota Semarang, Jawa Tengah 50132, Indonesia"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:visibility="@{wisata.favorite.equals(`-1`) &amp;&amp; wisata.pengunjung.equals(`-1`) ? View.GONE : View.VISIBLE}">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:visibility="@{wisata.favorite.equals(`-1`) ? View.GONE : View.VISIBLE}">
+                                <FrameLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="32dp"
+                                    android:layout_weight="1">
+                                    <ImageView
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_gravity="right|end|center_vertical"
+                                        android:adjustViewBounds="true"
+                                        android:src="@drawable/ic_action_favorite_true"
+                                        android:tint="@android:color/black"/>
+                                </FrameLayout>
+
+                                <TextView
+                                    android:id="@+id/tv_favourite"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="left|start|center_vertical"
+                                    android:gravity="left|start|center_vertical"
+                                    android:text="@{wisata.favorite}"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    tools:text="15"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:visibility="@{wisata.favorite.equals(`-1`) ? View.GONE : View.VISIBLE}">
+                                <FrameLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="32dp"
+                                    android:layout_weight="1">
+                                    <ImageView
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_gravity="right|end|center_vertical"
+                                        android:adjustViewBounds="true"
+                                        android:src="@drawable/ic_action_direction"
+                                        android:tint="@android:color/black"/>
+                                </FrameLayout>
+
+                                <TextView
+                                    android:id="@+id/tv_pengunjung"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="left|start|center_vertical"
+                                    android:gravity="left|start|center_vertical"
+                                    android:text="@{wisata.pengunjung}"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    tools:text="15"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+
         </android.support.v7.widget.CardView>
 
     </LinearLayout>

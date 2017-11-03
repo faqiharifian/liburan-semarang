@@ -13,9 +13,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object WisataClient {
 //    val BASE_URL = "http://52.187.117.60/wisata_semarang/wisata/"
-    val BASE_URL = "http://wisata.me/wisata/"
+//    val BASE_URL = "http://wisata.me/wisata/"
+    val BASE_URL = "http://d32a58bc.ngrok.io/wisata/"
 //    val IMAGE_URL = "http://52.187.117.60/wisata_semarang/img/wisata/"
-    val IMAGE_URL = "http://wisata.me/img/"
+//    val IMAGE_URL = "http://wisata.me/img/"
+    val IMAGE_URL = "http://d32a58bc.ngrok.io/img/"
 
     private var retrofit: Retrofit? = null
 

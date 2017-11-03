@@ -10,6 +10,9 @@ import android.view.*
 import com.arifian.training.liburansemarang.Utils.Constants
 import com.arifian.training.liburansemarang.Utils.Constants.Companion.KEY_WISATA
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils
+import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_FAVORITE
+import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_LATEST
+import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_VISITED
 import com.arifian.training.liburansemarang.adapters.WisataAdapter
 import com.arifian.training.liburansemarang.databinding.FragmentHomeBinding
 import com.arifian.training.liburansemarang.models.Wisata
@@ -51,11 +54,16 @@ class HomeFragment : Fragment() {
 
         if(savedInstanceState != null){
             wisataArrayList = Parcels.unwrap(savedInstanceState.getParcelable(Constants.KEY_WISATA))
-        }else {
-            getWisata()
         }
 
         return mBinding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(wisataArrayList.size <= 0){
+            getWisata()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -71,16 +79,19 @@ class HomeFragment : Fragment() {
         when (id) {
             R.id.action_sort_favorite -> {
                 if (pref.sort() != PreferenceUtils.SORT_FAVORITE) {
+                    pref.sort(SORT_FAVORITE)
                     getWisata()
                 }
             }
             R.id.action_sort_latest -> {
                 if (pref.sort() != PreferenceUtils.SORT_LATEST) {
+                    pref.sort(SORT_LATEST)
                     getWisata()
                 }
             }
             R.id.action_sort_visited -> {
                 if (pref.sort() != PreferenceUtils.SORT_VISITED) {
+                    pref.sort(SORT_VISITED)
                     getWisata()
                 }
             }
@@ -106,6 +117,12 @@ class HomeFragment : Fragment() {
                     override fun onSuccess(response: WisataResponse) {
                         wisataArrayList.addAll(response.wisata!!)
                         adapter.swapData(wisataArrayList)
+
+                        if(wisataArrayList.size <= 0){
+                            mBinding.empty.visibility = View.VISIBLE
+                        }else{
+                            mBinding.empty.visibility = View.GONE
+                        }
                     }
                 })
     }

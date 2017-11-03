@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#f44336</color>
-    <color name="colorPrimaryDark">#dd2c00</color>
-    <color name="colorAccent">#448aff</color>
+    <!--<color name="colorPrimary">#f44336</color>-->
+    <color name="colorPrimary">#f57c00</color>
+    <!--<color name="colorPrimaryDark">#dd2c00</color>-->
+    <color name="colorPrimaryDark">#bb4d00</color>
+    <!--<color name="colorAccent">#448aff</color>-->
+    <color name="colorAccent">#00c853</color>
     <color name="colorRouteLine">#dd2c00</color>
 
     <color name="black_overlay">#66000000</color>
