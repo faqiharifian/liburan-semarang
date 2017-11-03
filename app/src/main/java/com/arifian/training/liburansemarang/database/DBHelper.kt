@@ -20,7 +20,9 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         private val DESKRIPSI_WISATA = "deskripsi_wisata"
         private val LATITUDE_WISATA = "latitude_wisata"
         private val LONGITUDE_WISATA = "longitude_wisata"
-        private val DATABASE_VERSION = 3
+        private val PENGUNJUNG_WISATA = "pengunjung_wisata"
+        private val FAVORITE_WISATA = "favorite_wisata"
+        private val DATABASE_VERSION = 4
 
         private val CREATE_TABLE = ("CREATE TABLE " + DATABASE_TABLE
                 + " (" + WISATA_ID + " INTEGER  PRIMARY KEY, "
@@ -29,7 +31,9 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
                 + ALAMAT_WISATA + " TEXT, "
                 + DESKRIPSI_WISATA + " TEXT, "
                 + LATITUDE_WISATA + " VARCHAR(20), "
-                + LONGITUDE_WISATA + " VARCHAR(20));")
+                + LONGITUDE_WISATA + " VARCHAR(20), "
+                + PENGUNJUNG_WISATA + " INTEGER, "
+                + FAVORITE_WISATA + " INTEGER);")
 
     }
 
@@ -51,6 +55,8 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         cv.put(DESKRIPSI_WISATA, wisata.deksripsiWisata)
         cv.put(LATITUDE_WISATA, wisata.latitudeWisata)
         cv.put(LONGITUDE_WISATA, wisata.longitudeWisata)
+        cv.put(PENGUNJUNG_WISATA, wisata.pengunjung)
+        cv.put(FAVORITE_WISATA, wisata.favorite)
 
         val db = writableDatabase
         val result = db.insert(DATABASE_TABLE, null, cv)
@@ -82,7 +88,9 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
                         cursor.getString(cursor.getColumnIndex(ALAMAT_WISATA)),
                         cursor.getString(cursor.getColumnIndex(DESKRIPSI_WISATA)),
                         cursor.getString(cursor.getColumnIndex(LATITUDE_WISATA)),
-                        cursor.getString(cursor.getColumnIndex(LONGITUDE_WISATA))
+                        cursor.getString(cursor.getColumnIndex(LONGITUDE_WISATA)),
+                        cursor.getString(cursor.getColumnIndex(PENGUNJUNG_WISATA)),
+                        cursor.getString(cursor.getColumnIndex(FAVORITE_WISATA))
                 )
                 wisatas.add(wisata)
             }

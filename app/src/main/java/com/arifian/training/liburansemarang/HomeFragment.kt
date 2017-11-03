@@ -5,21 +5,23 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.*
-import com.arifian.training.liburansemarang.Utils.Constants
 import com.arifian.training.liburansemarang.Utils.Constants.Companion.KEY_WISATA
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_FAVORITE
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_LATEST
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_VISITED
 import com.arifian.training.liburansemarang.adapters.WisataAdapter
+import com.arifian.training.liburansemarang.database.DBHelper
 import com.arifian.training.liburansemarang.databinding.FragmentHomeBinding
+import com.arifian.training.liburansemarang.models.Header
+import com.arifian.training.liburansemarang.models.Item
 import com.arifian.training.liburansemarang.models.Wisata
 import com.arifian.training.liburansemarang.models.remote.SimpleRetrofitCallback
 import com.arifian.training.liburansemarang.models.remote.responses.WisataResponse
 import org.parceler.Parcels
-import java.util.*
 
 
 /**
@@ -31,7 +33,8 @@ class HomeFragment : Fragment() {
 
     internal lateinit var mBinding: FragmentHomeBinding
 
-    internal var wisataArrayList: MutableList<Wisata> = ArrayList()
+//    internal var wisataArrayList: MutableList<Wisata> = ArrayList()
+    var list: ArrayList<Item> = ArrayList()
     internal lateinit var adapter: WisataAdapter
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -42,7 +45,7 @@ class HomeFragment : Fragment() {
 
         pref = PreferenceUtils(activity)
 
-        adapter = WisataAdapter(wisataArrayList, object : WisataAdapter.OnWisataClickListener {
+        adapter = WisataAdapter(list, object : WisataAdapter.OnWisataClickListener {
             override fun onItemClick(wisata: Wisata) {
                 val intent = Intent(activity, DetailWisataActivity::class.java)
                 intent.putExtra(KEY_WISATA, Parcels.wrap(wisata))
@@ -50,20 +53,32 @@ class HomeFragment : Fragment() {
             }
         })
 
+        var layoutManager = GridLayoutManager(activity, activity.resources.getInteger(R.integer.wisata_list_column))
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                when (adapter.getItemViewType(position)) {
+                    Item.TYPE_HEADER -> return activity.resources.getInteger(R.integer.wisata_list_column)
+                    Item.TYPE_ITEM -> return 1
+                    else -> return -1
+                }
+            }
+        }
+
+        mBinding.recyclerView.layoutManager = layoutManager
         mBinding.recyclerView.adapter = adapter
 
-        if(savedInstanceState != null){
-            wisataArrayList = Parcels.unwrap(savedInstanceState.getParcelable(Constants.KEY_WISATA))
-        }
+//        if(savedInstanceState != null){
+//            wisataArrayList = Parcels.unwrap(savedInstanceState.getParcelable(Constants.KEY_WISATA))
+//        }
 
         return mBinding.root
     }
 
     override fun onResume() {
         super.onResume()
-        if(wisataArrayList.size <= 0){
+//        if(wisataArrayList.size <= 0){
             getWisata()
-        }
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -103,7 +118,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun getWisata() {
-        wisataArrayList.clear()
+        list.clear()
+//        wisataArrayList.clear()
         val progress = ProgressDialog(activity)
         progress.isIndeterminate = true
         progress.setMessage("Loading")
@@ -115,10 +131,27 @@ class HomeFragment : Fragment() {
                 .wisata(pref.sort())
                 .enqueue(object : SimpleRetrofitCallback<WisataResponse>(activity, progress) {
                     override fun onSuccess(response: WisataResponse) {
-                        wisataArrayList.addAll(response.wisata!!)
-                        adapter.swapData(wisataArrayList)
+                        val db = DBHelper(activity)
+                        val wisataDB = db.query()
+                        list.add(Header("Favorite ("+wisataDB.size+")"))
+                        for(wisata: Wisata in wisataDB){
+                            list.add(wisata)
+                        }
 
-                        if(wisataArrayList.size <= 0){
+
+                        val wisataRemote = response.wisata!!
+                        val wisataNonFavorite = ArrayList<Wisata>()
+                        for(wisata: Wisata in wisataRemote){
+                            if(pref.isFavorite(wisata.idWisata!!))
+                                continue
+                            wisataNonFavorite.add(wisata)
+                        }
+                        list.add(Header("Tempat Wisata ("+wisataNonFavorite.size+")"))
+                        list.addAll(wisataNonFavorite)
+//                        wisataArrayList.addAll(response.wisata!!)
+                        adapter.swapData(list)
+
+                        if(list.size <= 0){
                             mBinding.empty.visibility = View.VISIBLE
                         }else{
                             mBinding.empty.visibility = View.GONE
@@ -139,8 +172,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState!!.putParcelable(Constants.KEY_WISATA, Parcels.wrap(wisataArrayList))
-    }
+//    override fun onSaveInstanceState(outState: Bundle?) {
+//        super.onSaveInstanceState(outState)
+//        outState!!.putParcelable(Constants.KEY_WISATA, Parcels.wrap(list))
+//    }
 }

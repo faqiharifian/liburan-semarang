@@ -10,11 +10,9 @@ import org.parceler.Parcel
  */
 
 @Parcel
-class Wisata {
+class Wisata(): Item(com.arifian.training.liburansemarang.models.Item.Companion.TYPE_ITEM) {
 
-    constructor()
-
-    constructor(idWisata: String?, namaWisata: String?, gambarWisata: String?, deksripsiWisata: String?, alamatWisata: String?, latitudeWisata: String?, longitudeWisata: String?) {
+    constructor(idWisata: String?, namaWisata: String?, gambarWisata: String?, deksripsiWisata: String?, alamatWisata: String?, latitudeWisata: String?, longitudeWisata: String?, pengunjung: String?, favorite: String?): this() {
         this.idWisata = idWisata
         this.namaWisata = namaWisata
         this.gambarWisata = gambarWisata
@@ -22,8 +20,8 @@ class Wisata {
         this.alamatWisata = alamatWisata
         this.latitudeWisata = latitudeWisata
         this.longitudeWisata = longitudeWisata
-        this.favorite = "-1"
-        this.pengunjung = "-1"
+        this.favorite = favorite
+        this.pengunjung = pengunjung
     }
 
     @SerializedName("id_wisata")

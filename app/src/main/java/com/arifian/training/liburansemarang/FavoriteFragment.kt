@@ -65,6 +65,6 @@ class FavoriteFragment : Fragment() {
     private fun getWisata() {
         val db = DBHelper(activity)
         wisataArrayList.addAll(db.query())
-        adapter.swapData(wisataArrayList)
+//        adapter.swapData(wisataArrayList)
     }
 }

@@ -60,6 +60,7 @@ class DetailWisataActivity : AppCompatActivity() {
     private fun favoriteClicked(){
         val message: String
         if(!favorite) {
+            wisata.favorite = (wisata.favorite!!.toInt() - 1).toString()
             var id = db.insert(wisata)
             if (id <= 0) {
                 message = "Favorite gagal ditambahkan ke database"
