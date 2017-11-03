@@ -2,6 +2,7 @@ package com.arifian.training.liburansemarang.models.remote
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.util.Log
 import android.widget.Toast
 import com.arifian.training.liburansemarang.models.remote.responses.BaseResponse
 import retrofit2.Call
@@ -50,8 +51,10 @@ abstract class SimpleRetrofitCallback<T : BaseResponse>(internal var activity: A
         }
         if (!call.isCanceled) {
             if (t is SocketTimeoutException) {
+                Log.e("fail call", "timeout")
                 Toast.makeText(activity, "timeout", Toast.LENGTH_SHORT).show()
             } else {
+                Log.e("fail call", t.message)
                 Toast.makeText(activity, t.message, Toast.LENGTH_SHORT).show()
             }
         }

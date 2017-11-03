@@ -20,6 +20,10 @@ interface WisataService {
     @POST("update_favorite.php")
     fun updateFavorite(@Field("id") id: String, @Field("favorite") favorite: Int): Call<BaseResponse>
 
+    @FormUrlEncoded
+    @POST("update_pengunjung.php")
+    fun updatePengunjung(@Field("id") id: String): Call<BaseResponse>
+
     @Multipart
     @POST("create_wisata.php")
     fun wisataPost(@Part file: MultipartBody.Part,

@@ -50,7 +50,6 @@ class DetailWisataActivity : AppCompatActivity() {
 
         GlideApp.with(this)
                 .load(WisataClient.IMAGE_URL + wisata.gambarWisata!!)
-                .centerCrop()
                 .into(mBinding.ivDetailGambar)
 
         mBinding.fab.setOnClickListener { view ->
@@ -129,6 +128,14 @@ class DetailWisataActivity : AppCompatActivity() {
                 favoriteClicked()
             }
             R.id.action_direction -> {
+                WisataApplication.get(this)
+                        .wisataService!!
+                        .updatePengunjung(wisata.idWisata.toString())
+                        .enqueue(object: SimpleRetrofitCallback<BaseResponse>(this){
+                            override fun onSuccess(response: BaseResponse) {
+
+                            }
+                        })
                 val gmmIntentUri = Uri.parse("google.navigation:q="+wisata.latitudeWisata+","+wisata.longitudeWisata)
                 val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
                 mapIntent.`package` = "com.google.android.apps.maps"
