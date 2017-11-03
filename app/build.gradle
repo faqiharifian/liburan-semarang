@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.arifian.training.wisatasemarangkotlin"
+        applicationId "com.arifian.training.liburansemarang"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
