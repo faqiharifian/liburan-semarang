@@ -2,6 +2,7 @@ package com.arifian.training.liburansemarang
 
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Point
@@ -15,7 +16,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_LATEST
 import com.arifian.training.liburansemarang.models.Wisata
 import com.arifian.training.liburansemarang.models.remote.SimpleRetrofitCallback
@@ -91,16 +91,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPerm
         locationRequest!!.setInterval(30 * 1000)
         locationRequest!!.setFastestInterval(5 * 1000)
 
-        getWisata()
-
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        Log.e("resume", "resume")
-
-//        gpsTracker = GPSTracker(activity)
+        getWisata()
     }
 
     override fun onMapReady(p0: GoogleMap?) {
@@ -109,7 +105,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPerm
         updateMarker()
 
         mMap!!.setOnMarkerClickListener { marker: Marker? ->
-            //            val origin = LatLng(gpsTracker!!.latitude, gpsTracker!!.longitude)
             destination = marker!!.position
             destinationMarker = marker
             marker.showInfoWindow()
@@ -132,6 +127,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPerm
     }
 
     private fun requestRoute() {
+        val progress = ProgressDialog(activity)
+        progress.isIndeterminate = true
+        progress.setMessage("Loading")
+        progress.setCancelable(false)
+        progress.show()
+
         mMap!!.clear()
         updateMarker()
 
@@ -141,10 +142,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPerm
                     .getRoute(origin!!.latitude.toString()+","+origin!!.longitude.toString(), destination!!.latitude.toString()+","+destination!!.longitude.toString(), getString(R.string.google_maps_key))
                     .enqueue(object: Callback<Response>{
                         override fun onFailure(call: Call<Response>?, t: Throwable?) {
+                            progress.dismiss()
                             Log.e("error", t!!.message)
                         }
 
                         override fun onResponse(call: Call<Response>?, response: retrofit2.Response<Response>?) {
+                            progress.dismiss()
                             if(response!!.isSuccessful){
                                 var option = PolylineOptions()
                                 option.color(ResourcesCompat.getColor(resources, R.color.colorRouteLine, activity.theme))
@@ -177,13 +180,16 @@ class MapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPerm
     }
 
     private fun getWisata() {
-        val progressBar = ProgressBar(activity, null, android.R.attr.progressBarStyleSmall)
+        val progress = ProgressDialog(activity)
+        progress.isIndeterminate = true
+        progress.setMessage("Loading")
+        progress.setCancelable(false)
+        progress.show()
 
-        progressBar.visibility = View.VISIBLE
         WisataApplication.get(activity)
                 .getService(activity)
                 .wisata(SORT_LATEST)
-                .enqueue(object : SimpleRetrofitCallback<WisataResponse>(activity) {
+                .enqueue(object : SimpleRetrofitCallback<WisataResponse>(activity, progress) {
                     override fun onSuccess(response: WisataResponse) {
                         wisataArrayList = response.wisata!!
                         updateMarker()
