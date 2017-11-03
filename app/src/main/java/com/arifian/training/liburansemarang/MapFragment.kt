@@ -98,6 +98,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPerm
 
     override fun onResume() {
         super.onResume()
+        Log.e("resume", "resume")
 
 //        gpsTracker = GPSTracker(activity)
     }
@@ -216,7 +217,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPerm
     @AfterPermissionGranted(REQUEST_LOCATION)
     private fun requestPermission() {
         val perms = arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION)
-        if (EasyPermissions.hasPermissions(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (EasyPermissions.hasPermissions(activity, Manifest.permission.ACCESS_FINE_LOCATION)) {
             // Already have permission, do the thing
             // ...
         } else {

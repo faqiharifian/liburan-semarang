@@ -4,12 +4,10 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import android.view.View
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils
 import com.arifian.training.liburansemarang.databinding.ActivityMainBinding
 
@@ -24,30 +22,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         pref = PreferenceUtils(this)
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        setSupportActionBar(mBinding.appBar!!.toolbar)
+        setSupportActionBar(mBinding.toolbar)
 
-        val toggle = ActionBarDrawerToggle(
-                this, mBinding.drawerLayout, mBinding.appBar!!.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        mBinding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+//        val toggle = ActionBarDrawerToggle(
+//                this, mBinding.drawerLayout, mBinding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+//        mBinding.drawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
 
-        mBinding.navView.setNavigationItemSelectedListener(this)
-        mBinding.navView.setCheckedItem(R.id.nav_home)
+//        mBinding.navView.setNavigationItemSelectedListener(this)
+//        mBinding.navView.setCheckedItem(R.id.nav_home)
 
-        supportFragmentManager.beginTransaction()
-                .replace(mBinding.appBar!!.contentMain!!.container.id, HomeFragment.newInstance())
-                .commit()
+        mBinding.viewPager.adapter = ViewPagerAdapter(supportFragmentManager)
+
+        mBinding.tabLayout.setupWithViewPager(mBinding.viewPager)
+
+//        supportFragmentManager.beginTransaction()
+//                .replace(mBinding.container.id, HomeFragment.newInstance())
+//                .commit()
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            supportActionBar!!.title = getString(R.string.app_name)
-            mBinding.navView.setCheckedItem(R.id.nav_home)
+//        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START)
+//        } else {
+//            supportActionBar!!.title = getString(R.string.app_name)
+//            mBinding.navView.setCheckedItem(R.id.nav_home)
             super.onBackPressed()
-        }
+//        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -78,15 +80,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        drawer.closeDrawer(GravityCompat.START)
+//        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+//        drawer.closeDrawer(GravityCompat.START)
 
         if (fragment != null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(mBinding.appBar!!.contentMain!!.container.id, fragment)
-                    .addToBackStack(null)
-                    .commit()
+//            supportFragmentManager.beginTransaction()
+//                    .replace(mBinding.container.id, fragment)
+//                    .addToBackStack(null)
+//                    .commit()
         }
         return true
+    }
+
+    class ViewPagerAdapter(val fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager){
+        var fragments = arrayOf<Fragment>()
+        init{
+            fragments = arrayOf(
+                    HomeFragment.newInstance(),
+                    MapFragment.newInstance()
+            )
+        }
+
+        override fun getPageTitle(position: Int): CharSequence {
+            return if(position == 1)
+                "Map"
+            else
+                "Wisata"
+        }
+
+        override fun getItem(position: Int): Fragment {
+            return fragments[position]
+        }
+
+        override fun getCount(): Int {
+            return fragments.size
+        }
     }
 }
