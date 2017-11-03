@@ -1,5 +1,6 @@
 package com.arifian.training.liburansemarang
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -35,6 +36,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mBinding.viewPager.adapter = ViewPagerAdapter(supportFragmentManager)
 
         mBinding.tabLayout.setupWithViewPager(mBinding.viewPager)
+
+        mBinding.fab.setOnClickListener{
+            startActivity(Intent(this, AddActivity::class.java))
+        }
 
 //        supportFragmentManager.beginTransaction()
 //                .replace(mBinding.container.id, HomeFragment.newInstance())

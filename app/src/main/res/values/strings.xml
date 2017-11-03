@@ -111,4 +111,5 @@
     <string name="sort_latest">Terbaru</string>
     <string name="sort_visited">Kunjungan</string>
     <string name="sort_favorite">Favorit</string>
+    <string name="title_activity_add">AddActivity</string>
 </resources>

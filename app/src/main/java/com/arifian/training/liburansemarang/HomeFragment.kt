@@ -142,8 +142,10 @@ class HomeFragment : Fragment() {
                         val wisataRemote = response.wisata!!
                         val wisataNonFavorite = ArrayList<Wisata>()
                         for(wisata: Wisata in wisataRemote){
-                            if(pref.isFavorite(wisata.idWisata!!))
+                            if(pref.isFavorite(wisata.idWisata!!)) {
+                                db.update(wisata)
                                 continue
+                            }
                             wisataNonFavorite.add(wisata)
                         }
                         list.add(Header("Tempat Wisata ("+wisataNonFavorite.size+")"))

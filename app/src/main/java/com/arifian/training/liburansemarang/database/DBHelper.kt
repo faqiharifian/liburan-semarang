@@ -64,6 +64,28 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         return result
     }
 
+    fun update(wisata: Wisata): Int{
+        val cv = ContentValues()
+        cv.put(NAMA_WISATA, wisata.namaWisata)
+        cv.put(GAMBAR_WISATA, wisata.gambarWisata)
+        cv.put(ALAMAT_WISATA, wisata.alamatWisata)
+        cv.put(DESKRIPSI_WISATA, wisata.deksripsiWisata)
+        cv.put(LATITUDE_WISATA, wisata.latitudeWisata)
+        cv.put(LONGITUDE_WISATA, wisata.longitudeWisata)
+        cv.put(PENGUNJUNG_WISATA, wisata.pengunjung)
+        cv.put(FAVORITE_WISATA, wisata.favorite)
+
+        var clause = WISATA_ID+ " = ?"
+        var args = arrayOf(
+                wisata.idWisata
+        )
+
+        val db = writableDatabase
+        val result = db.update(DATABASE_TABLE, cv, clause, args)
+        db.close()
+        return result
+    }
+
     fun delete(wisata: Wisata): Int{
         val clause = WISATA_ID+" = ?"
         val args = Array(1, {wisata.idWisata})
