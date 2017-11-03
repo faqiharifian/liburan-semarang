@@ -20,10 +20,10 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         private val DESKRIPSI_WISATA = "deskripsi_wisata"
         private val LATITUDE_WISATA = "latitude_wisata"
         private val LONGITUDE_WISATA = "longitude_wisata"
-        private val DATABASE_VERSION = 1
+        private val DATABASE_VERSION = 2
 
         private val CREATE_TABLE = ("CREATE TABLE " + DATABASE_TABLE
-                + " (" + WISATA_ID + " INTEGER  PRIMARY KEY AUTOINCREMENT, "
+                + " (" + WISATA_ID + " INTEGER  PRIMARY KEY, "
                 + NAMA_WISATA + " VARCHAR(200), "
                 + GAMBAR_WISATA + " VARCHAR(200), "
                 + ALAMAT_WISATA + " TEXT, "
@@ -44,6 +44,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
 
     fun insert(wisata: Wisata): Long{
         val cv = ContentValues()
+        cv.put(WISATA_ID, wisata.idWisata)
         cv.put(NAMA_WISATA, wisata.namaWisata)
         cv.put(GAMBAR_WISATA, wisata.gambarWisata)
         cv.put(ALAMAT_WISATA, wisata.alamatWisata)
@@ -58,8 +59,8 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
     }
 
     fun delete(wisata: Wisata): Int{
-        val clause = NAMA_WISATA+" = ?"
-        val args = Array(1, {wisata.namaWisata})
+        val clause = WISATA_ID+" = ?"
+        val args = Array(1, {wisata.idWisata})
 
         val db = this.writableDatabase
         val count = db.delete(DATABASE_TABLE, clause, args)

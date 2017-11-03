@@ -1,6 +1,7 @@
 package com.arifian.training.liburansemarang.models.remote
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.widget.Toast
 import com.arifian.training.liburansemarang.models.remote.responses.BaseResponse
 import retrofit2.Call
@@ -13,8 +14,16 @@ import java.net.SocketTimeoutException
  */
 
 abstract class SimpleRetrofitCallback<T : BaseResponse>(internal var activity: Activity) : Callback<T> {
+    var progress: ProgressDialog? = null
+
+    constructor(activity: Activity, progress: ProgressDialog) : this(activity) {
+        this.progress = progress
+    }
 
     override fun onResponse(call: Call<T>, response: Response<T>) {
+        if(progress != null){
+            progress!!.dismiss()
+        }
 
         if (response.code() == 200) {
 
@@ -36,6 +45,9 @@ abstract class SimpleRetrofitCallback<T : BaseResponse>(internal var activity: A
     }
 
     override fun onFailure(call: Call<T>, t: Throwable) {
+        if(progress != null){
+            progress!!.dismiss()
+        }
         if (!call.isCanceled) {
             if (t is SocketTimeoutException) {
                 Toast.makeText(activity, "timeout", Toast.LENGTH_SHORT).show()

@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#dd2c00</color>
     <color name="colorAccent">#448aff</color>
     <color name="colorRouteLine">#dd2c00</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

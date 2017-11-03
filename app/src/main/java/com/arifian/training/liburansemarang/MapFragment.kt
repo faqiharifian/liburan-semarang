@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.arifian.training.liburansemarang.Utils.GPSTracker
+import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_LATEST
 import com.arifian.training.liburansemarang.drawroutemap.DrawRouteMaps
 import com.arifian.training.liburansemarang.drawroutemap.models.Response
 import com.arifian.training.liburansemarang.models.Wisata
@@ -110,7 +111,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPerm
         progressBar.visibility = View.VISIBLE
         WisataApplication.get(activity)
                 .getService(activity)
-                .wisata
+                .wisata(SORT_LATEST)
                 .enqueue(object : SimpleRetrofitCallback<WisataResponse>(activity) {
                     override fun onSuccess(response: WisataResponse) {
                         wisataArrayList = response.wisata!!
