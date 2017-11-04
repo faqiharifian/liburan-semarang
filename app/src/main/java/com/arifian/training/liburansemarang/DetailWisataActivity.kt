@@ -3,11 +3,14 @@ package com.arifian.training.liburansemarang
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.design.widget.Snackbar
 import android.support.v4.content.res.ResourcesCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
+import android.transition.Slide
 import android.view.Menu
 import android.view.MenuItem
 import com.arifian.training.liburansemarang.Utils.Constants.Companion.KEY_WISATA
@@ -23,6 +26,10 @@ import org.parceler.Parcels
 
 class DetailWisataActivity : AppCompatActivity() {
 
+    companion object {
+        const val KEY_IMAGE = "image"
+    }
+
     internal lateinit var mBinding: ActivityDetailWisataBinding
     internal lateinit var wisata: Wisata
 
@@ -35,11 +42,24 @@ class DetailWisataActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val transition = Slide()
+            transition.excludeTarget(android.R.id.statusBarBackground, true)
+            window.enterTransition = transition
+            window.returnTransition = transition
+        }
+
         wisata = Parcels.unwrap(intent.getParcelableExtra<Parcelable>(KEY_WISATA))
+
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail_wisata)
+
+            ViewCompat.setTransitionName(mBinding.toolbarLayout, KEY_IMAGE)
+        supportPostponeEnterTransition()
+        supportStartPostponedEnterTransition()
+
         pref = PreferenceUtils(this)
         db = DBHelper(this)
 
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail_wisata)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setTitle(wisata.namaWisata)

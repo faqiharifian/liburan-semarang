@@ -21,6 +21,6 @@ class SplashScreenActivity : AppCompatActivity() {
             override fun run() {
                 startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
             }
-        }, 100)
+        }, 1000)
     }
 }

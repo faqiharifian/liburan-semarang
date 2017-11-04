@@ -4,10 +4,13 @@ package com.arifian.training.liburansemarang
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.*
+import com.arifian.training.liburansemarang.DetailWisataActivity.Companion.KEY_IMAGE
 import com.arifian.training.liburansemarang.Utils.Constants.Companion.KEY_WISATA
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_FAVORITE
@@ -46,10 +49,12 @@ class HomeFragment : Fragment() {
         pref = PreferenceUtils(activity)
 
         adapter = WisataAdapter(list, object : WisataAdapter.OnWisataClickListener {
-            override fun onItemClick(wisata: Wisata) {
+            override fun onItemClick(view: View, wisata: Wisata) {
                 val intent = Intent(activity, DetailWisataActivity::class.java)
                 intent.putExtra(KEY_WISATA, Parcels.wrap(wisata))
-                startActivity(intent)
+
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, KEY_IMAGE)
+                ActivityCompat.startActivity(activity, intent, options.toBundle())
             }
         })
 

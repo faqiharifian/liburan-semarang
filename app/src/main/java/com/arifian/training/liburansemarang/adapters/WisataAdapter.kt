@@ -58,7 +58,7 @@ class WisataAdapter(wisataArrayList: List<Item>, var listener: OnWisataClickList
     }
 
     interface OnWisataClickListener {
-        fun onItemClick(wisata: Wisata)
+        fun onItemClick(view: View, wisata: Wisata)
     }
 
     inner class ViewHolder(private val binding: Any?, val view: View) : RecyclerView.ViewHolder(view){
@@ -79,7 +79,7 @@ class WisataAdapter(wisataArrayList: List<Item>, var listener: OnWisataClickList
                         .centerCrop()
                         .into(currentBinding.ivItemGambar)
 
-                itemView.setOnClickListener { v -> listener.onItemClick(currentItem) }
+                itemView.setOnClickListener { v -> listener.onItemClick(binding.ivItemGambar, currentItem) }
             }
 
         }

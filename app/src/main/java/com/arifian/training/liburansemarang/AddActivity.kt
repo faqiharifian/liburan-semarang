@@ -36,15 +36,6 @@ class AddActivity : AppCompatActivity() {
         const val REQUEST_IMAGE = 1
         const val REQUEST_PERMISSION = 2
         const val REQUEST_PLACE = 3
-
-        fun newInstance(): CreateFragment {
-
-            val args = Bundle()
-
-            val fragment = CreateFragment()
-            fragment.arguments = args
-            return fragment
-        }
     }
 
     lateinit var mBinding: ActivityAddBinding
@@ -138,7 +129,6 @@ class AddActivity : AppCompatActivity() {
         progress.isIndeterminate = true
         progress.setMessage("Loading")
         progress.setCancelable(false)
-        progress.show()
 
         if(check(mBinding.edtNama)
                 && check(mBinding.edtDeskripsi)
@@ -147,6 +137,7 @@ class AddActivity : AppCompatActivity() {
             if(uri == null){
                 Toast.makeText(this, "Gambar harus ada", Toast.LENGTH_SHORT).show()
             }else{
+                progress.show()
 //                val file = RealPathUtils(this).getFile(uri!!)
                 val file = File(FileUtils.getPath(this, uri))
 
