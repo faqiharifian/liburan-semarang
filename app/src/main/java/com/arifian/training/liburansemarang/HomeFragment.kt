@@ -11,7 +11,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.*
 import com.arifian.training.liburansemarang.DetailWisataActivity.Companion.KEY_IMAGE
-import com.arifian.training.liburansemarang.Utils.Constants.Companion.KEY_WISATA
+import com.arifian.training.liburansemarang.DetailWisataActivity.Companion.KEY_WISATA
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_FAVORITE
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils.Companion.SORT_LATEST
@@ -36,7 +36,6 @@ class HomeFragment : Fragment() {
 
     internal lateinit var mBinding: FragmentHomeBinding
 
-//    internal var wisataArrayList: MutableList<Wisata> = ArrayList()
     var list: ArrayList<Item> = ArrayList()
     internal lateinit var adapter: WisataAdapter
 
@@ -72,18 +71,12 @@ class HomeFragment : Fragment() {
         mBinding.recyclerView.layoutManager = layoutManager
         mBinding.recyclerView.adapter = adapter
 
-//        if(savedInstanceState != null){
-//            wisataArrayList = Parcels.unwrap(savedInstanceState.getParcelable(Constants.KEY_WISATA))
-//        }
-
         return mBinding.root
     }
 
     override fun onResume() {
         super.onResume()
-//        if(wisataArrayList.size <= 0){
-            getWisata()
-//        }
+        getWisata()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -124,7 +117,7 @@ class HomeFragment : Fragment() {
 
     private fun getWisata() {
         list.clear()
-//        wisataArrayList.clear()
+
         val progress = ProgressDialog(activity)
         progress.isIndeterminate = true
         progress.setMessage("Loading")
@@ -155,7 +148,7 @@ class HomeFragment : Fragment() {
                         }
                         list.add(Header("Tempat Wisata ("+wisataNonFavorite.size+")"))
                         list.addAll(wisataNonFavorite)
-//                        wisataArrayList.addAll(response.wisata!!)
+
                         adapter.swapData(list)
 
                         if(list.size <= 0){
@@ -178,9 +171,4 @@ class HomeFragment : Fragment() {
             return fragment
         }
     }
-
-//    override fun onSaveInstanceState(outState: Bundle?) {
-//        super.onSaveInstanceState(outState)
-//        outState!!.putParcelable(Constants.KEY_WISATA, Parcels.wrap(list))
-//    }
 }

@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity
 import android.transition.Slide
 import android.view.Menu
 import android.view.MenuItem
-import com.arifian.training.liburansemarang.Utils.Constants.Companion.KEY_WISATA
 import com.arifian.training.liburansemarang.Utils.GlideApp
 import com.arifian.training.liburansemarang.Utils.PreferenceUtils
 import com.arifian.training.liburansemarang.database.DBHelper
@@ -27,6 +26,7 @@ import org.parceler.Parcels
 class DetailWisataActivity : AppCompatActivity() {
 
     companion object {
+        const val KEY_WISATA = "wisata"
         const val KEY_IMAGE = "image"
     }
 
